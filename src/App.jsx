@@ -6,14 +6,16 @@ import Footer from "./componentes/Footer";
 import RegisterPage from "./componentes/RegisterPage";
 import LoginPage from "./componentes/LoginPage";
 import Cart from "./componentes/Cart";
+import Pizza from "./componentes/Pizza";
 function App() {
   return (
     <>
       <Navbar />
-      {/* <Home />
-      <RegisterPage /> 
-      <LoginPage />*/}
-      <Cart />
+      {/*<Home />
+       <RegisterPage /> 
+      <LoginPage />
+      <Cart />*/}
+      <Pizza />
       <Footer />
     </>
   );
