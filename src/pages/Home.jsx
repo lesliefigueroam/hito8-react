@@ -10,7 +10,7 @@ const Home = () => {
   useEffect(() => {
     const fetchPizzas = async () => {
       try {
-        const response = await fetch("https://api-pizzas-eou9.onrender.com//api/pizzas");
+        const response = await fetch("https://api-pizzas-eou9.onrender.com/api/pizzas");
         const data = await response.json();
         setPizzas(data);
       } catch (error) {
