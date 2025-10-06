@@ -1,12 +1,49 @@
-# React + Vite
+# 🍕 Pizzería Mamma Mia - Hito 5
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Proyecto desarrollado como parte del curso de **Desafío Latam**.  
+Este hito implementa **React Router** para manejar el enrutamiento en la aplicación de la pizzería.
 
-Currently, two official plugins are available:
+## 🚀 Tecnologías utilizadas
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- [React](https://react.dev/) con [Vite](https://vitejs.dev/)
+- [React Router DOM](https://reactrouter.com/)
+- [Bootstrap 5](https://getbootstrap.com/)
 
-## Expanding the ESLint configuration
+## 📂 Estructura del proyecto
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- `src/pages/`: Contiene las páginas principales (Home, Register, Login, Cart, Pizza, Profile, NotFound).
+- `src/componentes/`: Contiene componentes reutilizables (Navbar, Footer, etc).
+- `src/App.jsx`: Configuración de las rutas con React Router.
+
+## ⚙️ Requisitos previos
+
+- Node.js v16 o superior
+- npm o yarn
+
+## 🛠️ Instalación y ejecución
+
+1. Clonar este repositorio:
+   ```bash
+   git clone https://github.com/tuusuario/pizzeria-mamma-mia.git
+   cd pizzeria-mamma-mia
+   ```
+2. Instalar dependencias:
+   ```bash
+   npm install
+   ```
+3. Iniciar servidor de desarrollo:
+   ```bash
+   npm run dev
+   ```
+4. Abrir la URL que aparece en consola (por defecto [http://localhost:5000](http://localhost:5000)).
+
+## 🔗 API
+
+Este proyecto consume una **API proporcionada por Desafío Latam** para obtener la información de las pizzas.  
+⚠️ **La API no está incluida en este repositorio**, ya que el revisor dispone de ella de manera local.
+
+Para ejecutar correctamente el proyecto, asegúrate de tener la API corriendo en local (según las instrucciones entregadas en la academia).
+
+## 👤 Autor
+
+- Leslie Figueroa
