@@ -56,6 +56,15 @@ Esto significa que la **primera solicitud después de un periodo de inactividad 
 
 > Si deseas usar tu propia instancia local de la API, sigue las instrucciones originales de la academia.
 
+---
+
+## 🌐 Proyecto en línea
+
+Si deseas ver el proyecto en funcionamiento, puedes acceder aquí:  
+[https://hito5-react-8eok6etul-leslie-figueroas-projects.vercel.app/](https://hito5-react-8eok6etul-leslie-figueroas-projects.vercel.app/)
+
+---
+
 ## 👤 Autor
 
 - Leslie Figueroa
