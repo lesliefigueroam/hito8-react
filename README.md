@@ -35,7 +35,7 @@ Este hito implementa **React Router** para manejar el enrutamiento en la aplicac
    ```bash
    npm run dev
    ```
-4. Abrir la URL que aparece en consola (por defecto [http://localhost:5000](http://localhost:5000)).
+4. Abrir la URL que aparece en consola (por defecto [http://localhost:5173](http://localhost:5173)).
 
 ## 🔗 API
 
