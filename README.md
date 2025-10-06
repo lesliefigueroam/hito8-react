@@ -40,9 +40,21 @@ Este hito implementa **React Router** para manejar el enrutamiento en la aplicac
 ## 🔗 API
 
 Este proyecto consume una **API proporcionada por Desafío Latam** para obtener la información de las pizzas.  
-⚠️ **La API no está incluida en este repositorio**, ya que el revisor dispone de ella de manera local.
+⚠️ **La API no está incluida en este repositorio**.
 
-Para ejecutar correctamente el proyecto, asegúrate de tener la API corriendo en local (según las instrucciones entregadas en la academia).
+⚠️ **Antes**, la API debía ejecutarse de manera local.  
+**Ahora**, la API está disponible en línea en Render:
+
+```
+https://api-pizzas-eou9.onrender.com
+```
+
+✅ No es necesario ejecutar la API localmente para que la aplicación funcione correctamente.
+
+⚠️ **Nota importante sobre Render:** Los servidores gratuitos en Render entran en **modo de suspensión** si no reciben solicitudes durante unos minutos.  
+Esto significa que la **primera solicitud después de un periodo de inactividad puede tardar entre 30 y 60 segundos** en responder mientras el servidor se vuelve a levantar.
+
+> Si deseas usar tu propia instancia local de la API, sigue las instrucciones originales de la academia.
 
 ## 👤 Autor
 
