@@ -1,7 +1,18 @@
 import React from "react";
 import { formatearPrecio } from "../utils/helpers";
+import { useCart } from "../context/CartContext";
 
 function CardPizza(props) {
+  const { addToCart } = useCart(); // usamos la función del Context
+
+  // Armamos un objeto pizza con los datos que queremos guardar
+  const pizza = {
+    id: props.id,
+    name: props.name,
+    price: props.price,
+    img: props.img,
+  };
+
   return (
     <div className="card h-100 shadow-sm" style={{ width: "21rem" }}>
       <img src={props.img} className="card-img-top" alt={props.name} />
@@ -28,7 +39,11 @@ function CardPizza(props) {
             </button>
           </div>
           <div className="col d-flex justify-content-center">
-            <button type="button" className="btn btn-success px-4">
+            <button
+              type="button"
+              className="btn btn-success px-4"
+              onClick={() => addToCart(pizza)}
+            >
               Añadir
             </button>
           </div>

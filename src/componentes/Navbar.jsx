@@ -1,8 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useCart } from "../context/CartContext"; // se importa el hook
 
 const Navbar = () => {
-  const total = 25000;
+  const { total } = useCart(); // se obtiene el total global
   const token = false;
   return (
     <div className="container">
