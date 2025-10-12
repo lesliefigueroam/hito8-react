@@ -12,6 +12,7 @@ import Cart from "./pages/Cart";
 import Pizza from "./pages/Pizza";
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
+
 function App() {
   return (
     <>
@@ -22,7 +23,7 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/cart" element={<Cart />} />
-          <Route path="/pizza/p001" element={<Pizza />} />
+          <Route path="/pizza/:id" element={<Pizza />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/404" element={<NotFound />} />
           {/* catch-all para cualquier ruta no definida */}

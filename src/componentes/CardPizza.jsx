@@ -1,6 +1,7 @@
 import React from "react";
 import { formatearPrecio } from "../utils/helpers";
 import { useCart } from "../context/CartContext";
+import { Link } from "react-router-dom";
 
 function CardPizza(props) {
   const { addToCart } = useCart(); // usamos la función del Context
@@ -34,9 +35,9 @@ function CardPizza(props) {
           <p className="fw-bold mb-1">Precio:</p>
           <p>${formatearPrecio(props.price)}</p>
           <div className="col d-flex justify-content-center">
-            <button type="button" className="btn btn-light px-4">
+            <Link to={`/pizza/${props.id}`} className="btn btn-light px-4">
               Ver más
-            </button>
+            </Link>
           </div>
           <div className="col d-flex justify-content-center">
             <button
