@@ -132,7 +132,7 @@ Esto significa que la **primera solicitud después de un periodo de inactividad 
 ## 🌐 Proyecto en línea
 
 Si deseas ver el proyecto en funcionamiento, puedes acceder aquí:
-[https://hito6-react-8eok6etul-leslie-figueroas-projects.vercel.app/](https://hito6-react-8eok6etul-leslie-figueroas-projects.vercel.app/)
+[https://hito6-react.vercel.app/](https://hito6-react.vercel.app/)
 
 ---
 
