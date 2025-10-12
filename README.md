@@ -118,6 +118,7 @@ Cada pizza tiene el siguiente formato:
   "desc": "Una pizza tradicional con ingredientes frescos y auténticos.",
   "img": "https://..."
 }
+```
 
 ✅ No es necesario ejecutar la API localmente para que la aplicación funcione correctamente.
 
@@ -148,4 +149,7 @@ Si deseas ver el proyecto en funcionamiento, puedes acceder aquí:
 
 - Leslie Figueroa
 - 💻 Proyecto académico — Hito 6: Pizzería Mamma Mía (React + Context API)
+
+```
+
 ```
