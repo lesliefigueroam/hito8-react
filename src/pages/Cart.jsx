@@ -2,9 +2,11 @@
 //import { pizzaCart } from "../data/pizzas";
 import { useCart } from "../context/CartContext";
 import { formatearPrecio } from "../utils/helpers";
+import { useUser } from "../context/UserContext";
 
 const Cart = () => {
   const { cart, updateQuantity, total } = useCart();
+  const { token } = useUser();
 
   return (
     <div className="container my-4">
@@ -52,7 +54,17 @@ const Cart = () => {
           </div>
           <div className="d-flex justify-content-between align-items-center mt-3">
             <h4>Total: ${formatearPrecio(total)}</h4>
-            <button className="btn btn-success">Pagar</button>
+            <button
+              className="btn btn-success"
+              disabled={!token} // deshabilitar si no hay token
+              title={!token ? "Debes iniciar sesión para pagar" : ""}
+              onClick={() => {
+                if (!token) return; // guard extra, por si acaso
+                // lógica de pago aquí...
+              }}
+            >
+              Pagar
+            </button>
           </div>
         </>
       )}

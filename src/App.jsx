@@ -12,6 +12,8 @@ import Cart from "./pages/Cart";
 import Pizza from "./pages/Pizza";
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
+import ProtectedRoute from "./routes/ProtectedRoute";
+import PublicOnlyRoute from "./routes/PublicOnlyRoute";
 
 function App() {
   return (
@@ -19,14 +21,24 @@ function App() {
       <Navbar />
       <main className="container py-3">
         <Routes>
+          {/* públicas para todos */}
           <Route path="/" element={<Home />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/cart" element={<Cart />} />
           <Route path="/pizza/:id" element={<Pizza />} />
-          <Route path="/profile" element={<Profile />} />
+          <Route path="/cart" element={<Cart />} />
+
+          {/* páginas PÚBLICAS solo si NO hay token */}
+          <Route element={<PublicOnlyRoute />}>
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+          </Route>
+
+          {/* páginas PRIVADAS: requieren token */}
+          <Route element={<ProtectedRoute />}>
+            <Route path="/profile" element={<Profile />} />
+          </Route>
+
+          {/* not found */}
           <Route path="/404" element={<NotFound />} />
-          {/* catch-all para cualquier ruta no definida */}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>

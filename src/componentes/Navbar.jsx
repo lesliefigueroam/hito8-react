@@ -1,17 +1,18 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext"; // se importa el hook
+import { useUser } from "../context/UserContext";
 
 const Navbar = () => {
   const { total } = useCart(); // se obtiene el total global
-  const token = false;
+  const { token, logout } = useUser();
   return (
     <div className="container">
       <nav className=" navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
         <div className="container">
-          <a className="navbar-brand" href="#">
+          <Link className="navbar-brand" to="/">
             Pizzería Mamma Mia
-          </a>
+          </Link>
           <button
             className="navbar-toggler"
             type="button"
@@ -35,7 +36,9 @@ const Navbar = () => {
                     <Link className="btn btn-outline-light" to="/profile">
                       🔓 Profile
                     </Link>
-                    <button className="btn btn-outline-light">🔒 Logout</button>
+                    <button onClick={logout} className="btn btn-outline-light">
+                      🔒 Logout
+                    </button>
                   </>
                 ) : (
                   <>
