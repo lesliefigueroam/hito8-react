@@ -5,7 +5,8 @@ import { useUser } from "../context/UserContext";
 
 const Navbar = () => {
   const { total } = useCart(); // se obtiene el total global
-  const { token, logout } = useUser();
+  const { isAuth, logout } = useUser();
+
   return (
     <div className="container">
       <nav className=" navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
@@ -31,7 +32,7 @@ const Navbar = () => {
                   🍕 Home
                 </Link>
 
-                {token ? (
+                {isAuth ? (
                   <>
                     <Link className="btn btn-outline-light" to="/profile">
                       🔓 Profile
