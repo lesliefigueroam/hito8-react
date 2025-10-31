@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
 
-const API = "https://api-pizzas-eou9.onrender.com/api/";
+const API = "https://api-pizzas-eou9.onrender.com/api";
 
 const UserContext = createContext();
 

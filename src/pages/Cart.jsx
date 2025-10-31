@@ -1,21 +1,60 @@
-//import { useState } from "react";
+import { useState } from "react";
 //import { pizzaCart } from "../data/pizzas";
 import { useCart } from "../context/CartContext";
 import { formatearPrecio } from "../utils/helpers";
 import { useUser } from "../context/UserContext";
 
+const API = "https://api-pizzas-eou9.onrender.com/api";
+
 const Cart = () => {
   const { cart, updateQuantity, total } = useCart();
-  const { token } = useUser();
+  const { token, isAuth } = useUser();
+  const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleCheckout = async () => {
+    if (!isAuth) return;
+    try {
+      setLoading(true);
+      setMessage("");
+      const res = await fetch(`${API}/checkouts`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // token del UserContext
+        },
+        body: JSON.stringify({ cart }),
+      });
+      if (!res.ok) {
+        // Opcional: leer el error del backend
+        let errMsg = "No se pudo procesar el pago";
+        try {
+          const errData = await res.json();
+          if (errData?.message) errMsg = errData.message;
+        } catch {}
+        throw new Error(errMsg);
+      }
+
+      // éxito
+      setMessage("✅ ¡Compra realizada con éxito!");
+      // opcional: limpiar el carrito aquí si la pauta lo permite
+      // clearCart();
+    } catch (e) {
+      setMessage(`❌ ${e.message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="container my-4">
       <h2 className="text-center mb-4">Carrito de Compras</h2>
-      {/* 2️⃣ Si no hay productos */}
+      {/* Si no hay productos */}
       {cart.length === 0 ? (
         <p className="text-center">Tu carrito está vacío 😢</p>
       ) : (
         <>
+          {/* ... listado de items ... */}
           <div className="list-group">
             {cart.map((p) => (
               <div
@@ -38,6 +77,7 @@ const Cart = () => {
                   <button
                     className="btn btn-outline-danger btn-sm me-2"
                     onClick={() => updateQuantity(p.id, -1)}
+                    disabled={loading} //  bloquear mientras paga
                   >
                     -
                   </button>
@@ -56,16 +96,19 @@ const Cart = () => {
             <h4>Total: ${formatearPrecio(total)}</h4>
             <button
               className="btn btn-success"
-              disabled={!token} // deshabilitar si no hay token
-              title={!token ? "Debes iniciar sesión para pagar" : ""}
-              onClick={() => {
-                if (!token) return; // guard extra, por si acaso
-                // lógica de pago aquí...
-              }}
+              disabled={!isAuth || loading} // usa isAuth y respeta loading
+              title={!isAuth ? "Debes iniciar sesión para pagar" : ""}
+              onClick={handleCheckout} //  ahora sí llama al checkout real
             >
-              Pagar
+              {loading ? "Pagando..." : "Pagar"}
             </button>
           </div>
+          {/* ✅ muestra feedback */}
+          {message && (
+            <div className="alert alert-info mt-3" role="alert">
+              {message}
+            </div>
+          )}
         </>
       )}
     </div>
