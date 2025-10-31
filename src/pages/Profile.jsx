@@ -1,39 +1,39 @@
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useUser } from "../context/UserContext";
 
 export default function Profile() {
-  const navigate = useNavigate();
+  const { email, getProfile, logout } = useUser();
+  const [loading, setLoading] = useState(false);
+  const [serverEmail, setServerEmail] = useState(email);
 
-  const handleLogout = () => {
-    // Por ahora redirige a /login
-    navigate("/login");
-  };
-
-  const user = {
-    email: "usuario@example.com",
-    avatar: "https://i.pravatar.cc/150?img=12", // imagen aleatoria para el perfil
-    name: "Usuario Ejemplo",
-  };
+  useEffect(() => {
+    const fetchMe = async () => {
+      try {
+        setLoading(true);
+        const me = await getProfile(); // GET /auth/me
+        if (me?.email) setServerEmail(me.email);
+      } catch (e) {
+        // opcional: mostrar error o forzar logout si 401
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchMe();
+  }, []);
 
   return (
-    <div className="container mt-5">
-      <div className="row justify-content-center">
-        <div className="col-md-6">
-          <div className="card shadow text-center p-4">
-            <img
-              src={user.avatar}
-              alt="Avatar"
-              className="rounded-circle mx-auto mb-3"
-              width="120"
-              height="120"
-            />
-            <h3 className="mb-2">{user.name}</h3>
-            <p className="text-muted mb-4">{user.email}</p>
-            <button onClick={handleLogout} className="btn btn-danger w-100">
-              Cerrar sesión
-            </button>
-          </div>
-        </div>
-      </div>
+    <div className="container py-4">
+      <h2>Perfil</h2>
+      {loading ? (
+        <p>Cargando perfil...</p>
+      ) : (
+        <p>
+          <b>Email:</b> {serverEmail}
+        </p>
+      )}
+      <button className="btn btn-danger" onClick={logout}>
+        Cerrar sesión
+      </button>
     </div>
   );
 }
