@@ -1,13 +1,19 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useUser } from "../context/UserContext";
 
 const RegisterPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+  const { register } = useUser();
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setMessage("");
 
     if (!email || !password || !confirmPassword) {
       setMessage("❌ Todos los campos son obligatorios");
@@ -24,7 +30,15 @@ const RegisterPage = () => {
       return;
     }
 
-    setMessage("✅ Registro exitoso");
+     try {
+      setLoading(true);
+      await register(email, password);
+      navigate("/profile");
+    } catch (err) {
+      setMessage(`❌ ${err.message}`);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -49,7 +63,9 @@ const RegisterPage = () => {
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
         />
-        <button type="submit">Registrarse</button>
+        <button type="submit" disabled={loading}>
+          {loading ? "Registrando..." : "Registrarse"}
+        </button>
       </form>
       {message && <p>{message}</p>}
     </div>
