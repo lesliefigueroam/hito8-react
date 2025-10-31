@@ -1,11 +1,11 @@
-# 🍕 Pizzería Mamma Mía - Hito 7
+# 🍕 Pizzería Mamma Mía - Hito 8 (React + Context + Auth + Checkout)
 
 ## 📘 Descripción del proyecto
 
-Proyecto desarrollado como parte del curso de **Desafío Latam**.  
-Esta aplicación web simula el sitio de una pizzería, permitiendo visualizar pizzas disponibles, ver sus detalles individuales, iniciar o cerrar sesión de manera simulada y realizar un pedido mediante un carrito de compras.
+Aplicación web desarrollada como parte del curso de **Desafío Latam**.  
+Permite listar pizzas, ver sus detalles, autenticar usuarios, gestionar un carrito de compras y realizar un **checkout** contra una API con **JWT**.
 
-El desarrollo se realizó utilizando **React**, **React Router DOM** y **Context API** para manejar el estado global de la aplicación, evitando el uso de props innecesarias y mejorando la escalabilidad del proyecto.
+Se implementó con **React + Vite**, **React Router DOM** y **Context API** para manejar estado global (usuario, carrito y pizzas).
 
 ## 🚀 Tecnologías utilizadas
 
@@ -17,99 +17,83 @@ El desarrollo se realizó utilizando **React**, **React Router DOM** y **Context
 
 ## 📂 Estructura del proyecto
 
-- `src/pages/`: Contiene las páginas principales (Home, Register, Login, Cart, Pizza, Profile, NotFound).
-- `src/context/`: Contiene los contextos globales (UserContext, CartContext, PizzaContext).
-- `src/componentes/`: Contiene componentes reutilizables (Navbar, Footer, CardPizza, etc).
-- `src/routes/`: Contiene componentes wrapper para las rutas protegidas y públicas (ProtectedRoute, PublicOnlyRoute).
-- `src/App.jsx`: Configuración de rutas con React Router DOM y wrappers de protección.
+```
+src/
+  componentes/
+    Navbar.jsx
+    Footer.jsx
+    CardPizza.jsx
+    ...
+  context/
+    UserContext.jsx      # login, register, logout, getProfile; token/email persistidos
+    CartContext.jsx      # addToCart, updateQuantity, removeItem, clearCart; total y count
+    PizzaContext.jsx     # catálogo y detalle desde la API
+  pages/
+    Home.jsx             # listado de pizzas
+    Pizza.jsx            # detalle de pizza (/pizza/:id)
+    Cart.jsx             # carrito + pago (checkout)
+    Profile.jsx          # perfil (usa getProfile)
+    LoginPage.jsx
+    RegisterPage.jsx
+    OrderSuccess.jsx     # resumen post-compra
+    NotFound.jsx
+  routes/
+    ProtectedRoute.jsx   # requiere sesión
+    PublicOnlyRoute.jsx  # accesible solo sin sesión
+  config.js              # API_BASE centralizada
+  App.jsx                # configuración de rutas
+```
 
 ---
 
 ## 🚀 Funcionalidades principales
 
-### 🏠 Página principal (`/`)
+### 🏠 Inicio `/`
 
-- Muestra todas las pizzas disponibles, obtenidas desde la **API de Render**.
-- Cada pizza se renderiza mediante el componente `CardPizza`.
-- Incluye botones:
-  - **Ver más** → lleva al detalle de la pizza seleccionada (`/pizza/:id`).
-  - **Añadir** → agrega la pizza al carrito global.
+- Muestra pizzas desde la API (Render)
+- Botones para ver detalle y agregar al carrito
 
-### 🍕 Detalle de pizza (`/pizza/:id`)
+### 🍕 Detalle `/pizza/:id`
 
-- Muestra la información completa de una pizza: nombre, descripción, ingredientes y precio.
-- Incluye un botón para añadir la pizza al carrito directamente desde la vista de detalle.
-- **Ahora realiza una petición real** a la API:  
-  `https://api-pizzas-eou9.onrender.com/api/pizzas/:id`
-- Maneja estados de carga, error y validación de datos.
+- Solicita datos reales a la API
+- Muestra descripción, ingredientes y precio
+- Permite agregar al carrito
 
-### 🛒 Carrito de compras (`/cart`)
+### 👤 Autenticación real
 
-- Muestra las pizzas agregadas al carrito global.
-- Permite aumentar o disminuir las cantidades con botones `+` y `–`.
-- Calcula el total del pedido automáticamente y en tiempo real.
-- **Botón Pagar:**
-  - Habilitado si el usuario tiene sesión iniciada (`token=true`).
-  - **Deshabilitado tras cerrar sesión (Logout)**, cumpliendo el requerimiento del hito.
-- Si el carrito está vacío, muestra un mensaje indicativo.
+| Función                     | Detalle                                          |
+| --------------------------- | ------------------------------------------------ |
+| `register(email, password)` | POST → `/auth/register`                          |
+| `login(email, password)`    | POST → `/auth/login`, guarda **token + email**   |
+| Persistencia                | `localStorage` (mantiene sesión al refrescar ✅) |
+| `getProfile()`              | GET → `/auth/me` con **Bearer JWT**              |
+| `logout()`                  | limpia estado y localStorage                     |
 
-### 👤 Sistema de usuario (simulado)
+### 🧾 Perfil `/profile`
 
-- Implementado con `UserContext`.
-- Contiene `token` (true/false), `login()` y `logout()`.
-- Al iniciar la app, el `token` es **true** por defecto.
-- El botón **Logout** cambia `token=false` y muestra las opciones **Login/Register**.
-- Al reiniciar el servidor, `token` vuelve a **true** (comportamiento esperado por el hito).
+- Protegido
+- Muestra email del usuario traído desde la API
+- Botón **Cerrar sesión**
 
-### 🔝 Navbar
+### 🛒 Carrito `/cart`
 
-- Visible en todas las páginas.
-- Muestra el total del carrito actualizado dinámicamente.
-- Contiene enlaces a **Home** y **Total** (siempre visibles).
-- Muestra opciones según sesión:
-  - **Profile / Logout** si `token=true`.
-  - **Login / Register** si `token=false`.
+- Sumar / restar cantidad
+- Total dinámico
+- **Checkout real:**
+  - POST → `/checkouts` con **Bearer Token**
+  - Mensaje de éxito
+  - Limpia carrito
+  - Redirige a `/order-success` con resumen
 
----
+### 🎉 Order Success `/order-success`
 
-## 🧠 Contextos implementados
+- Muestra resumen de compra
+- Si se entra directo, redirige a `/`
 
-### 🟢 CartContext
+### 🔐 Rutas protegidas
 
-Administra el estado global del carrito de compras. Incluye funciones para:
-
-- `addToCart(pizza)` → agrega una pizza al carrito.
-- `updateQuantity(id, amount)` → modifica la cantidad de una pizza.
-- `total` → calcula el monto total.
-
-### 🟣 PizzaContext
-
-Administra la lista global de pizzas obtenidas desde la API de Render:
-
-- URL base: [https://api-pizzas-eou9.onrender.com/api/pizzas](https://api-pizzas-eou9.onrender.com/api/pizzas)
-- Manejadores de **loading** y **error**.
-
-### 🔵 UserContext
-
-Controla la sesión de usuario simulada:
-
-- `token` → comienza en **true**.
-- `login()` → cambia a `true`.
-- `logout()` → cambia a `false`.
-
-Utilizado en `Navbar`, `Cart`, y en las rutas protegidas.
-
----
-
-## 🔐 Rutas protegidas
-
-- `/profile` → solo accesible con `token=true` (caso contrario redirige a `/login`).
-- `/login` y `/register` → accesibles solo si `token=false` (caso contrario redirigen al Home).
-
-Rutas implementadas mediante los componentes:
-
-- `ProtectedRoute`
-- `PublicOnlyRoute`
+- `/profile`, `/order-success` solo con sesión
+- `/login`, `/register` solo sin sesión
 
 ---
 
@@ -122,7 +106,7 @@ Rutas implementadas mediante los componentes:
 
 1. Clonar este repositorio:
    ```bash
-   git clone https://github.com/lesliefigueroam/hito7-react.git
+   git clone https://github.com/lesliefigueroam/hito8-react.git
    cd hito6-react
    ```
 2. Instalar dependencias:
@@ -160,6 +144,14 @@ Cada pizza tiene el siguiente formato:
 }
 ```
 
+### 🔗 Configuración de API
+
+```js
+// src/config.js
+//export const API_BASE = "http://localhost:5000/api";
+export const API_BASE = "https://api-pizzas-eou9.onrender.com/api";
+```
+
 ✅ No es necesario ejecutar la API localmente para que la aplicación funcione correctamente.
 
 ⚠️ **Nota importante sobre Render:** Los servidores gratuitos en Render entran en **modo de suspensión** si no reciben solicitudes durante unos minutos.
@@ -172,24 +164,29 @@ Esto significa que la **primera solicitud después de un periodo de inactividad 
 ## 🌐 Proyecto en línea
 
 Si deseas ver el proyecto en funcionamiento, puedes acceder aquí:
-[https://hito7-react.vercel.app/](https://hito7-react.vercel.app/)
+[https://hito8-react.vercel.app/](https://hito8-react.vercel.app/)
 
 ---
 
-## 🧾 Observaciones del hito
+## ✅ Checklist del Hito 8
 
-- ✅ Uso de useParams con petición real a /api/pizzas/:id.
-- ✅ Implementación de UserContext con token, login() y logout().
-- ✅ Deshabilitación del botón Pagar al cerrar sesión (token=false).
-- ✅ Navbar dinámico según estado del usuario.
-- ✅ Rutas protegidas y públicas con ProtectedRoute y PublicOnlyRoute.
-- ✅ Manejo de errores y estados de carga en las peticiones.
-- ✅ Cumplimiento completo de los criterios de la rúbrica (Completamente logrado).
+- [x] Registro e inicio de sesión reales
+- [x] JWT guardado en **localStorage**
+- [x] Logout borra credenciales
+- [x] `getProfile()` con Bearer JWT
+- [x] Rutas protegidas / públicas
+- [x] Carrito global con Context
+- [x] Checkout real con JWT
+- [x] Mensaje de éxito + redirección + limpieza del carrito
+- [x] Navbar dinámico según sesión
+- [x] Consumo de API remota desde Render
+
+---
 
 ## 👤 Autoría
 
 - Leslie Figueroa
-- 💻 Proyecto académico — Hito 7: Pizzería Mamma Mía (React + Context API + Router)
+- 💻 Proyecto académico — Hito 8: Pizzería Mamma Mía (React + Context + Auth + Checkout)
 
 ```
 
