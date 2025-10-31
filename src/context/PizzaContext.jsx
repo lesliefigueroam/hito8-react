@@ -1,4 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
+import { API_BASE } from "../config";
+console.log("[API_BASE]", API_BASE);
 
 // 1️⃣ Creamos el contexto
 const PizzaContext = createContext();
@@ -13,9 +15,7 @@ export function PizzaProvider({ children }) {
   useEffect(() => {
     const fetchPizzas = async () => {
       try {
-        const res = await fetch(
-          "https://api-pizzas-eou9.onrender.com/api/pizzas"
-        );
+        const res = await fetch(`${API_BASE}/pizzas`);
         if (!res.ok) throw new Error("Error al obtener pizzas");
         const data = await res.json();
         setPizzas(data);

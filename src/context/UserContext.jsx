@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect } from "react";
+import { API_BASE } from "../config";
 
-const API = "https://api-pizzas-eou9.onrender.com/api";
+//const API = "http://localhost:5000/api";
 
 const UserContext = createContext();
 
@@ -21,7 +22,7 @@ export function UserProvider({ children }) {
   }, [email]);
 
   const login = async (emailInput, password) => {
-    const res = await fetch(`${API}/auth/login`, {
+    const res = await fetch(`${API_BASE}/auth/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: emailInput, password }),
@@ -34,7 +35,7 @@ export function UserProvider({ children }) {
   };
 
   const register = async (emailInput, password) => {
-    const res = await fetch(`${API}/auth/register`, {
+    const res = await fetch(`${API_BASE}/auth/register`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: emailInput, password }),
@@ -48,7 +49,7 @@ export function UserProvider({ children }) {
 
   const getProfile = async () => {
     if (!token) throw new Error("No autenticado");
-    const res = await fetch(`${API}/auth/me`, {
+    const res = await fetch(`${API_BASE}/auth/me`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     if (!res.ok) throw new Error("No se pudo obtener el perfil");

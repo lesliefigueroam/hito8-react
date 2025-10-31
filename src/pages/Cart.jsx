@@ -3,8 +3,9 @@ import { useState } from "react";
 import { useCart } from "../context/CartContext";
 import { formatearPrecio } from "../utils/helpers";
 import { useUser } from "../context/UserContext";
+import { API_BASE } from "../config";
 
-const API = "https://api-pizzas-eou9.onrender.com/api";
+//const API = "https://api-pizzas-eou9.onrender.com/api";
 
 const Cart = () => {
   const { cart, updateQuantity, total } = useCart();
@@ -17,7 +18,7 @@ const Cart = () => {
     try {
       setLoading(true);
       setMessage("");
-      const res = await fetch(`${API}/checkouts`, {
+      const res = await fetch(`${API_BASE}/checkouts`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
