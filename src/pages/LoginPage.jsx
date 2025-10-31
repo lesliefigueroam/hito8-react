@@ -1,12 +1,18 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useUser } from "../context/UserContext";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+  const { login } = useUser();
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setMessage("");
 
     if (!email || !password) {
       setMessage("❌ Todos los campos son obligatorios");
@@ -18,7 +24,15 @@ const LoginPage = () => {
       return;
     }
 
-    setMessage("✅ Inicio de sesión exitoso");
+    try {
+      setLoading(true);
+      await login(email, password);
+      navigate("/profile");
+    } catch (err) {
+      setMessage(`❌ ${err.message}`);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -37,7 +51,9 @@ const LoginPage = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <button type="submit">Ingresar</button>
+        <button type="submit" disabled={loading}>
+          {loading ? "Ingresando..." : "Ingresar"}
+        </button>
       </form>
       {message && <p>{message}</p>}
     </div>
