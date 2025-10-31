@@ -1,6 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { API_BASE } from "../config";
-console.log("[API_BASE]", API_BASE);
 
 // 1️⃣ Creamos el contexto
 const PizzaContext = createContext();

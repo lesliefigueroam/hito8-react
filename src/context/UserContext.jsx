@@ -1,8 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { API_BASE } from "../config";
 
-//const API = "http://localhost:5000/api";
-
 const UserContext = createContext();
 
 export function UserProvider({ children }) {

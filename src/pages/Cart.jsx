@@ -1,33 +1,34 @@
 import { useState } from "react";
-//import { pizzaCart } from "../data/pizzas";
+import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { formatearPrecio } from "../utils/helpers";
 import { useUser } from "../context/UserContext";
 import { API_BASE } from "../config";
 
-//const API = "https://api-pizzas-eou9.onrender.com/api";
-
 const Cart = () => {
-  const { cart, updateQuantity, total } = useCart();
+  const navigate = useNavigate();
+  const { cart, updateQuantity, total, clearCart } = useCart(); // clearCart opcional si existe
   const { token, isAuth } = useUser();
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleCheckout = async () => {
     if (!isAuth) return;
+
     try {
       setLoading(true);
       setMessage("");
+
       const res = await fetch(`${API_BASE}/checkouts`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, // token del UserContext
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ cart }),
       });
+
       if (!res.ok) {
-        // Opcional: leer el error del backend
         let errMsg = "No se pudo procesar el pago";
         try {
           const errData = await res.json();
@@ -36,10 +37,29 @@ const Cart = () => {
         throw new Error(errMsg);
       }
 
-      // éxito
+      // éxito backend -> intenta leer datos (opcional)
+      const data = await res.json().catch(() => null);
+
+      // 1) mensaje en el Cart (como ahora)
       setMessage("✅ ¡Compra realizada con éxito!");
-      // opcional: limpiar el carrito aquí si la pauta lo permite
-      // clearCart();
+
+      // 2) arma el resumen para la pantalla de éxito
+      const order = {
+        id:
+          data?.orderId ||
+          data?._id ||
+          data?.id ||
+          Math.random().toString(36).slice(2, 10).toUpperCase(),
+        createdAt: data?.createdAt || new Date().toISOString(),
+        items: cart,
+        total: typeof data?.total === "number" ? data.total : total,
+      };
+
+      // espera 1.2s para que el usuario vea el mensaje y redirige
+      setTimeout(() => {
+        clearCart?.(); //  limpia el carrito
+        navigate("/order-success", { state: { order } });
+      }, 1200);
     } catch (e) {
       setMessage(`❌ ${e.message}`);
     } finally {
@@ -50,12 +70,11 @@ const Cart = () => {
   return (
     <div className="container my-4">
       <h2 className="text-center mb-4">Carrito de Compras</h2>
-      {/* Si no hay productos */}
+
       {cart.length === 0 ? (
         <p className="text-center">Tu carrito está vacío 😢</p>
       ) : (
         <>
-          {/* ... listado de items ... */}
           <div className="list-group">
             {cart.map((p) => (
               <div
@@ -78,7 +97,7 @@ const Cart = () => {
                   <button
                     className="btn btn-outline-danger btn-sm me-2"
                     onClick={() => updateQuantity(p.id, -1)}
-                    disabled={loading} //  bloquear mientras paga
+                    disabled={loading}
                   >
                     -
                   </button>
@@ -86,6 +105,7 @@ const Cart = () => {
                   <button
                     className="btn btn-outline-success btn-sm ms-2"
                     onClick={() => updateQuantity(p.id, +1)}
+                    disabled={loading}
                   >
                     +
                   </button>
@@ -93,18 +113,20 @@ const Cart = () => {
               </div>
             ))}
           </div>
+
           <div className="d-flex justify-content-between align-items-center mt-3">
             <h4>Total: ${formatearPrecio(total)}</h4>
             <button
               className="btn btn-success"
-              disabled={!isAuth || loading} // usa isAuth y respeta loading
+              disabled={!isAuth || loading || cart.length === 0}
               title={!isAuth ? "Debes iniciar sesión para pagar" : ""}
-              onClick={handleCheckout} //  ahora sí llama al checkout real
+              onClick={handleCheckout}
             >
               {loading ? "Pagando..." : "Pagar"}
             </button>
           </div>
-          {/* ✅ muestra feedback */}
+
+          {/* ✅ Mantiene el mensaje de éxito/errores en el Cart */}
           {message && (
             <div className="alert alert-info mt-3" role="alert">
               {message}

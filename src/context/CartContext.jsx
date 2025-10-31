@@ -1,58 +1,72 @@
+// src/context/CartContext.jsx
 import { createContext, useContext, useState, useMemo } from "react";
 
-// 1️⃣ Creamos el contexto (una “caja global”)
-const CartContext = createContext();
+// 1️⃣ Contexto
+const CartContext = createContext(null);
 
-// 2️⃣ Creamos un hook personalizado para usarlo fácilmente
+// 2️⃣ Hook
 export function useCart() {
   return useContext(CartContext);
 }
 
-// 3️⃣ Componente que envolverá toda la App
+// 3️⃣ Provider
 export function CartProvider({ children }) {
   const [cart, setCart] = useState([]);
 
-  // Agregar producto al carrito
+  // Agregar
   function addToCart(pizza) {
-    setCart((prevCart) => {
-      const found = prevCart.find((p) => p.id === pizza.id);
+    setCart((prev) => {
+      const found = prev.find((p) => p.id === pizza.id);
       if (found) {
-        // Si ya está, aumentamos la cantidad
-        return prevCart.map((p) =>
+        return prev.map((p) =>
           p.id === pizza.id ? { ...p, count: p.count + 1 } : p
         );
-      } else {
-        // Si no está, lo agregamos con count = 1
-        return [...prevCart, { ...pizza, count: 1 }];
       }
+      return [...prev, { ...pizza, count: 1 }];
     });
   }
 
-  // Quitar producto completamente
+  // Quitar item
   function removeFromCart(id) {
-    setCart((prevCart) => prevCart.filter((p) => p.id !== id));
+    setCart((prev) => prev.filter((p) => p.id !== id));
   }
 
-  // Cambiar cantidad (por + o -)
+  // Cambiar cantidad (+ / -)
   function updateQuantity(id, amount) {
-    setCart((prevCart) =>
-      prevCart
-        .map((p) => (p.id === id ? { ...p, count: p.count + amount } : p))
+    setCart((prev) =>
+      prev
+        .map((p) =>
+          p.id === id ? { ...p, count: Math.max(0, p.count + amount) } : p
+        )
         .filter((p) => p.count > 0)
     );
   }
 
-  // Calcular total del carrito
-  const total = useMemo(() => {
-    return cart.reduce((acc, p) => acc + p.price * p.count, 0);
-  }, [cart]);
+  // 🔹 LIMPIAR CARRITO
+  function clearCart() {
+    setCart([]); // esto dispara re-render en Navbar y páginas que usan useCart()
+  }
+
+  // Totales
+  const total = useMemo(
+    () => cart.reduce((acc, p) => acc + p.price * p.count, 0),
+    [cart]
+  );
+
+  // 🔹 Cantidad total (opcional pero útil para el Navbar)
+  const count = useMemo(
+    () => cart.reduce((acc, p) => acc + p.count, 0),
+    [cart]
+  );
 
   const value = {
     cart,
     addToCart,
     removeFromCart,
     updateQuantity,
+    clearCart, // ← expuesto
     total,
+    count, // ← expuesto
   };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

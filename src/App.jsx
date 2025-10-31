@@ -14,6 +14,7 @@ import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import PublicOnlyRoute from "./routes/PublicOnlyRoute";
+import OrderSuccess from "./pages/OrderSuccess";
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
           {/* páginas PRIVADAS: requieren token */}
           <Route element={<ProtectedRoute />}>
             <Route path="/profile" element={<Profile />} />
+            <Route path="/order-success" element={<OrderSuccess />} />
           </Route>
 
           {/* not found */}

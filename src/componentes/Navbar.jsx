@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext"; // se importa el hook
 import { useUser } from "../context/UserContext";
+import { formatearPrecio } from "../utils/helpers";
 
 const Navbar = () => {
   const { total } = useCart(); // se obtiene el total global
@@ -55,7 +56,7 @@ const Navbar = () => {
             </div>
             <div className="ms-lg-3 mt-2 mt-lg-0">
               <Link to="/cart" className="btn btn-outline-info">
-                🛒 Total: ${total.toLocaleString()}
+                🛒 Total: ${formatearPrecio(total)}
               </Link>
             </div>
           </div>
