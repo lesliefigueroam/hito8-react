@@ -11,7 +11,7 @@ const RegisterPage = () => {
   const { register } = useUser();
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage("");
 
@@ -30,7 +30,7 @@ const RegisterPage = () => {
       return;
     }
 
-     try {
+    try {
       setLoading(true);
       await register(email, password);
       navigate("/profile");
