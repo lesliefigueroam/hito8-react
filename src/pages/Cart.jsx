@@ -135,7 +135,7 @@ const Cart = () => {
             </button>
           </div>
 
-          {/* ✅ Mantiene el mensaje de éxito/errores en el Cart */}
+          {/* Mantiene el mensaje de éxito/errores en el Cart */}
           {message && (
             <div className="alert alert-info mt-3" role="alert">
               {message}
