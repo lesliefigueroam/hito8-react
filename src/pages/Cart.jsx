@@ -116,6 +116,15 @@ const Cart = () => {
 
           <div className="d-flex justify-content-between align-items-center mt-3">
             <h4>Total: ${formatearPrecio(total)}</h4>
+            {!isAuth && cart.length > 0 && (
+              <div
+                className="alert alert-warning mt-3 text-center"
+                role="alert"
+              >
+                🔐 Para proceder con el pago debes iniciar sesión o crear una
+                cuenta.
+              </div>
+            )}
             <button
               className="btn btn-success"
               disabled={!isAuth || loading || cart.length === 0}

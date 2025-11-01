@@ -168,6 +168,18 @@ Si deseas ver el proyecto en funcionamiento, puedes acceder aquí:
 
 ---
 
+## 🧪 Datos de prueba (para evaluar sin registrar)
+
+Puedes ingresar con el siguiente usuario de prueba:
+
+| Email         | Contraseña |
+| ------------- | ---------- |
+| test@test.com | 123123     |
+
+> Útil para quienes quieran probar rápido sin crear cuenta.
+
+---
+
 ## ✅ Checklist del Hito 8
 
 - [x] Registro e inicio de sesión reales
